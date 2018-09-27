@@ -1,29 +1,32 @@
-from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.svm import SVC
-from sklearn.svm import LinearSVC
-from sklearn.svm import SVR
-from sklearn.naive_bayes import GaussianNB
+# from sklearn.linear_model import LinearRegression
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.tree import DecisionTreeClassifier
+# from sklearn.tree import DecisionTreeRegressor
+# from sklearn.svm import SVC
+# from sklearn.svm import LinearSVC
+# from sklearn.svm import SVR
+# from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.cluster import KMeans
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.decomposition import PCA
-from sklearn.decomposition import FactorAnalysis
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from xgboost import XGBClassifier
-from catboost import CatBoostRegressor
+# from sklearn.cluster import KMeans
+# from sklearn.ensemble import RandomForestClassifier
+# from sklearn.ensemble import GradientBoostingClassifier
+# from sklearn.decomposition import PCA
+# from sklearn.decomposition import FactorAnalysis
+# from sklearn.model_selection import train_test_split
+# from sklearn.metrics import accuracy_score
+
+# from xgboost import XGBClassifier
+# from catboost import CatBoostRegressor
 
 # ???
-import lightgbm as lgb
-import xgboost as xgb
+# import lightgbm as lgb
+# import xgboost as xgb
 
+import codecs as cd
 import numpy as np
 import pandas as pd
 
+'''
 x_train = dataset[:,0:10]
 y_train = dataset[:,10:]
 seed = 1
@@ -34,40 +37,42 @@ x_train, x_test, y_train, y_test = train_test_split(x_train, y_train, test_size=
 x_train = input_variables_values_training_datasets
 y_train = target_variables_values_training_datasets
 x_test = input_variables_values_test_datasets
+'''
 
-''' Linear and Logistic Regression '''
 def supervised_learning(x_train, y_train, x_test):
     # create model object
-    model = LinearRegression()
+    # model = LinearRegression()
 
-    model = LogisticRegression()
-
-    model = DecisionTreeClassifier(criterion='gini')
-    model = DecisionTreeClassifier(criterion='entropy')
-    model = DecisionTreeRegressor()
-
-    model = SVC(gamma='scale', decision_function_shape='ovo') #kernel=
-    model = LinearSVC()
-    model = SVR()
-
-    model = GaussianNB()
-    model = BernoulliNB()
-
-    model = KNeighborsClassifier(n_neighbors=6)
-
-    model = RandomForestClassifier()
+    # model = LogisticRegression()
+    #
+    # model = DecisionTreeClassifier(criterion='gini')
+    # model = DecisionTreeClassifier(criterion='entropy')
+    # model = DecisionTreeRegressor()
+    #
+    # model = SVC(gamma='scale', decision_function_shape='ovo') #kernel=
+    # model = LinearSVC()
+    # model = SVR()
+    #
+    # model = GaussianNB()
+    # model = BernoulliNB()
+    #
+    model = KNeighborsClassifier(n_neighbors=3)
+    #
+    # model = RandomForestClassifier()
 
     # train the model using the training sets and check score
     model.fit(x_train, y_train)
     model.score(x_train, y_train)
 
     # equation coefficient and intercept
-    print('coefficient:', model.coef_)
-    print('intercept:', model.intercept_)
+    # print('coefficient:', model.coef_)
+    # print('intercept:', model.intercept_)
 
     # predict output
-    predicted = model.predict(x_test)
+    predicted = pd.Series(model.predict(x_test))
+    return predicted
 
+'''
 # assumed have X (attributes) for training dataset and x_test (attributes) of test dataset
 def unsupervised_learning(x_train, x_test):
     # create model object
@@ -140,6 +145,17 @@ def catBoostRegressor():
     submission['Item_Identifier'] = test['Item_Identifier']
     submission['Outlet_Identifier'] = test['Outlet_Identifier']
     submission['Item_Outlet_Sales'] = model.predict(test)
+'''
 
 def main():
-    printf('hello world')
+    data = pd.read_csv('../data/small-csv/dev-most10.csv', names=['tweet-id', 'user-id', 'a', 'and', 'for', 'i', 'in', 'is', 'of', 'the', 'to', 'you', 'class'])
+    x_train = data.drop(['tweet-id', 'user-id', 'class'], axis=1)
+    y_train = pd.Series(data['class'])
+    x_test = x_train
+    predictions = supervised_learning(x_train, y_train, x_test)
+    print('actual\tpredict\tmatch?')
+    for i in range(len(predictions)):
+        print('{}\t{}\t{}'.format(y_train[i], predictions[i], True if (y_train[i] == predictions[i]) else False))
+
+if __name__ == "__main__":
+    main()
