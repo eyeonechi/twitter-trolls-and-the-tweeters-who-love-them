@@ -56,7 +56,7 @@ def supervised_learning(x_train, y_train, x_test):
     # model = GaussianNB()
     # model = BernoulliNB()
     #
-    model = KNeighborsClassifier(n_neighbors=3)
+    model = KNeighborsClassifier(n_neighbors=1)
     #
     # model = RandomForestClassifier()
 
@@ -148,14 +148,23 @@ def catBoostRegressor():
 '''
 
 def main():
-    data = pd.read_csv('../data/small-csv/dev-most10.csv', names=['tweet-id', 'user-id', 'a', 'and', 'for', 'i', 'in', 'is', 'of', 'the', 'to', 'you', 'class'])
-    x_train = data.drop(['tweet-id', 'user-id', 'class'], axis=1)
-    y_train = pd.Series(data['class'])
-    x_test = x_train
+    data_train = pd.read_csv('../data/small-csv/train-most10.csv', names=['tweet-id', 'user-id', 'a', 'and', 'for', 'i', 'in', 'is', 'of', 'the', 'to', 'you', 'class'])
+    data_test = pd.read_csv('../data/small-csv/dev-most10.csv', names=['tweet-id', 'user-id', 'a', 'and', 'for', 'i', 'in', 'is', 'of', 'the', 'to', 'you', 'class'])
+    x_train = data_train.drop(['tweet-id', 'user-id', 'class'], axis=1)
+    y_train = pd.Series(data_train['class'])
+    x_test = data_test.drop(['tweet-id', 'user-id', 'class'], axis=1)
+    y_test = pd.Series(data_test['class'])
     predictions = supervised_learning(x_train, y_train, x_test)
-    print('actual\tpredict\tmatch?')
+    # y_train = pd.Series([1, 3, 5, 6, 10])
+    # predictions = pd.Series([1, 2, 5, 3, 8])
+    print('{:10}\t{:10}\t{:10}'.format('actual', 'predict', 'match?'))
+    numerator = 0.0
+    denominator = float(len(predictions))
     for i in range(len(predictions)):
-        print('{}\t{}\t{}'.format(y_train[i], predictions[i], True if (y_train[i] == predictions[i]) else False))
+        match = True if (y_test[i] == predictions[i]) else False
+        numerator += 1 if match else 0
+        print('{:10}\t{:10}\t{:10}'.format(y_train[i], predictions[i], match))
+    print('accuracy = {:7.2f}%'.format(100 * numerator / denominator))
 
 if __name__ == "__main__":
     main()
