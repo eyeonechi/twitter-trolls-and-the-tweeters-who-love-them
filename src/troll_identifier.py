@@ -1,26 +1,31 @@
-# from sklearn.linear_model import LinearRegression
-# from sklearn.linear_model import LogisticRegression
-# from sklearn.tree import DecisionTreeClassifier
-# from sklearn.tree import DecisionTreeRegressor
-# from sklearn.svm import SVC
-# from sklearn.svm import LinearSVC
-# from sklearn.svm import SVR
-# from sklearn.naive_bayes import GaussianNB
+from sklearn.cluster import KMeans
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import RidgeClassifier
+from sklearn.naive_bayes import BernoulliNB
+from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
-# from sklearn.cluster import KMeans
-# from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import RadiusNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+
+from sklearn.tree import ExtraTreeClassifier
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import RandomForestClassifier
+# from sklearn.svm import SVC
+# from sklearn.svm import SVR
 # from sklearn.ensemble import GradientBoostingClassifier
 # from sklearn.decomposition import PCA
 # from sklearn.decomposition import FactorAnalysis
+
+# not working with categorical data
+# from sklearn.linear_model import LinearRegression
+# from sklearn.tree import DecisionTreeRegressor
+
 # from sklearn.model_selection import train_test_split
 # from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import LabelEncoder
 
-# from xgboost import XGBClassifier
-# from catboost import CatBoostRegressor
-
-# ???
-# import lightgbm as lgb
-# import xgboost as xgb
 
 import codecs as cd
 import numpy as np
@@ -39,37 +44,22 @@ y_train = target_variables_values_training_datasets
 x_test = input_variables_values_test_datasets
 '''
 
-def supervised_learning(x_train, y_train, x_test):
+def supervised_learning(x_train, y_train, x_test, method):
     # create model object
-    # model = LinearRegression()
+    # model = DecisionTreeRegressor()
 
     # model = LogisticRegression()
-    #
-    # model = DecisionTreeClassifier(criterion='gini')
-    # model = DecisionTreeClassifier(criterion='entropy')
-    # model = DecisionTreeRegressor()
-    #
     # model = SVC(gamma='scale', decision_function_shape='ovo') #kernel=
     # model = LinearSVC()
     # model = SVR()
-    #
-    # model = GaussianNB()
-    # model = BernoulliNB()
-    #
-    model = KNeighborsClassifier(n_neighbors=1)
-    #
-    # model = RandomForestClassifier()
 
-    # train the model using the training sets and check score
-    model.fit(x_train, y_train)
-    model.score(x_train, y_train)
+
 
     # equation coefficient and intercept
     # print('coefficient:', model.coef_)
     # print('intercept:', model.intercept_)
 
-    # predict output
-    predicted = pd.Series(model.predict(x_test))
+
     return predicted
 
 '''
@@ -95,76 +85,197 @@ def dimensionality_reduction(x_train, x_test):
 
     # reduced the dimension of test dataset
     test_reduced = model.transform(x_test)
-
-def gradient_boosting(x_train, y_train, x_test):
-    # create model object
-    model = GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)
-    model = XGBClassifier()
-
-    # train the model using the training sets and check score
-    model.fit(x_train, y_train)
-
-    # predict output
-    predicted = model.predict(x_test)
-
-def lightGBM():
-    data = np.random.rand(500, 10)
-    label = np.random.randint(2, size=500)
-    train_data = lgb.Dataset(data, label=label)
-    test_data = train_data.create_valid('test.svm')
-    param = {'num_leaves': 31, 'num_trees': 100, 'objective': 'binary'}
-    param['metric'] = 'auc'
-    num_round = 10
-    bst = lgb.train(param, train_data, num_round, valid_sets=[test_data])
-    bst.save_model('model.txt')
-
-    # 7 entities, each contains 10 features
-    data = np.random.rand(7, 10)
-    ypred = bst.predict(data)
-
-def catBoostRegressor():
-    #Read training and testing files
-    train = pd.read_csv("train.csv")
-    test = pd.read_csv("test.csv")
-
-    #Imputing missing values for both train and test
-    train.fillna(-999, inplace=True)
-    test.fillna(-999,inplace=True)
-
-    #Creating a training set for modeling and validation set to check model performance
-    X = train.drop(['Item_Outlet_Sales'], axis=1)
-    y = train.Item_Outlet_Sales
-
-    X_train, X_validation, y_train, y_validation = train_test_split(X, y, train_size=0.7, random_state=1234)
-    categorical_features_indices = np.where(X.dtypes != np.float)[0]
-
-    model = CatBoostRegressor(iterations=50, depth=3, learning_rate=0.1, loss_function='RMSE')
-    model.fit(x_train, y_train, cat_features=categorical_features_indices, eval_set=(x_train_validation, y_train_validation), plot=True)
-
-    submission = pd.DataFrame()
-    submission['Item_Identifier'] = test['Item_Identifier']
-    submission['Outlet_Identifier'] = test['Outlet_Identifier']
-    submission['Item_Outlet_Sales'] = model.predict(test)
 '''
 
+train_dataset = '../data/small-csv/train-most10.csv'
+test_dataset = '../data/small-csv/dev-most10.csv'
+
 def main():
-    data_train = pd.read_csv('../data/small-csv/train-most10.csv', names=['tweet-id', 'user-id', 'a', 'and', 'for', 'i', 'in', 'is', 'of', 'the', 'to', 'you', 'class'])
-    data_test = pd.read_csv('../data/small-csv/dev-most10.csv', names=['tweet-id', 'user-id', 'a', 'and', 'for', 'i', 'in', 'is', 'of', 'the', 'to', 'you', 'class'])
-    x_train = data_train.drop(['tweet-id', 'user-id', 'class'], axis=1)
+
+    # set up dataset
+    data_train = pd.read_csv(train_dataset, names=['tweet-id', 'user-id', 'a', 'and', 'for', 'i', 'in', 'is', 'of', 'the', 'to', 'you', 'class'])
+    data_test = pd.read_csv(test_dataset, names=['tweet-id', 'user-id', 'a', 'and', 'for', 'i', 'in', 'is', 'of', 'the', 'to', 'you', 'class'])
+    x_train = data_train.drop(['tweet-id', 'user-id', 'class'], axis=1).apply(pd.to_numeric, errors='ignore')
     y_train = pd.Series(data_train['class'])
-    x_test = data_test.drop(['tweet-id', 'user-id', 'class'], axis=1)
+    x_test = data_test.drop(['tweet-id', 'user-id', 'class'], axis=1).apply(pd.to_numeric, errors='ignore')
     y_test = pd.Series(data_test['class'])
-    predictions = supervised_learning(x_train, y_train, x_test)
     # y_train = pd.Series([1, 3, 5, 6, 10])
     # predictions = pd.Series([1, 2, 5, 3, 8])
-    print('{:10}\t{:10}\t{:10}'.format('actual', 'predict', 'match?'))
-    numerator = 0.0
-    denominator = float(len(predictions))
-    for i in range(len(predictions)):
-        match = True if (y_test[i] == predictions[i]) else False
-        numerator += 1 if match else 0
-        print('{:10}\t{:10}\t{:10}'.format(y_train[i], predictions[i], match))
-    print('accuracy = {:7.2f}%'.format(100 * numerator / denominator))
+
+    type = input('type: [1: supervised, 2: unsupervised] ')
+    if type == 1:
+        method = input('method: [1: classification, 2: regression] ')
+        if method == 1:
+            classifier = input('classifier: [1: decision tree, 2: extra tree, 3: extra trees, 4: k nearest neighbor, 5: naive bayes, 6: radius neighbors, 7: random forest, 8: support vector machine] ')
+            if classifier == 1:
+                criterion = input('criterion: [1: gini, 2: entropy] ')
+                if criterion == 1:
+                    print(type, method, classifier, criterion)
+                    model = DecisionTreeClassifier(criterion='gini')
+                elif criterion == 2:
+                    print(type, method, classifier, criterion)
+                    model = DecisionTreeClassifier(criterion='entropy')
+                else:
+                    print('no criterion chosen')
+                    exit()
+            elif classifier == 2:
+                print(type, method, classifier)
+                model = ExtraTreeClassifier()
+            elif classifier == 3:
+                print(type, method, classifier)
+                model = ExtraTreesClassifier()
+            elif classifier == 4:
+                n = input('n: [1: 1, 2: 3: 3: 5] ')
+                if n == 1:
+                    print(type, method, classifier, n)
+                    model = KNeighborsClassifier(n_neighbors=1)
+                elif n == 2:
+                    print(type, method, classifier, n)
+                    model = KNeighborsClassifier(n_neighbors=3)
+                elif n == 3:
+                    print(type, method, classifier, n)
+                    model = KNeighborsClassifier(n_neighbors=5)
+                else:
+                    print('no n chosen')
+                    exit()
+            elif classifier == 5:
+                version = input('version: [1: gaussian, 2: bernoulli] ')
+                if version == 1:
+                    print(type, method, classifier, version)
+                    model = GaussianNB()
+                elif version == 2:
+                    print(type, method, classifier, version)
+                    model = BernoulliNB()
+                else:
+                    print('no version chosen')
+                    exit()
+            elif classifier == 6:
+                print(type, method, classifier)
+                model = RadiusNeighborsClassifier(radius=1.0)
+            elif classifier == 7:
+                print(type, method, classifier)
+                model = RandomForestClassifier()
+            elif classifier == 8:
+                print(type, method, classifier)
+                model = LinearSVC(multi_class='crammer_singer') #multi_class='ovr'
+            else:
+                print('no classifier chosen')
+                exit()
+            # train the model using the training sets and check score
+            model.fit(x_train, y_train)
+            model.score(x_train, y_train)
+
+            # predict output
+            predictions = pd.Series(model.predict(x_test))
+            print('{:10}\t{:10}\t{:10}\t{:10}'.format('actual', 'predict', 'approximate', 'match?'))
+
+            # calculate accuracy
+            numerator = 0.0
+            denominator = float(len(predictions))
+            for i in range(len(predictions)):
+                match = True if (y_test[i] == predictions[i]) else False
+                numerator += 1 if match else 0
+                print('{:10}\t{:10}\t{:10}'.format(y_train[i], predictions[i], match))
+            print('accuracy = {:7.2f}%'.format(100 * numerator / denominator))
+        elif method == 2:
+            # transform into binary classification problem
+            # y_train = y_train.apply(lambda x: 0 if x == 'Other' else 1)
+            # y_test = y_test.apply(lambda x: 0 if x == 'Other' else 1)
+
+            # transform string labels into integers
+            # le = LabelEncoder()
+            # le.fit(y_train) # print(le.transform(['LeftTroll', 'Other', 'Other', 'RightTroll'])), print(le.inverse_transform([0, 1, 2, 1]))
+            # print(le.classes_)
+            #
+            # y_train = le.transform(y_train)
+            # y_test = le.transform(y_test)
+
+            regressor = input('regressor: [1: linear discriminant analysis, 2: logistic regression, 3: ridge regression] ')
+            if regressor == 1:
+                print(type, method, regressor)
+                model = LinearDiscriminantAnalysis()
+            elif regressor == 2:
+                print(type, method, regressor)
+                model = LogisticRegression(solver='lbfgs', multi_class='multinomial') #'newton-cg'
+            elif regressor == 3:
+                print(type, method, regressor)
+                model = RidgeClassifier()
+            else:
+                print('no regressor chosen')
+                exit()
+
+            # train the model using the training sets and check score
+            model.fit(x_train, y_train)
+            model.score(x_train, y_train)
+
+            print('coefficient:', model.coef_)
+            print('intercept:', model.intercept_)
+
+            # predict output
+            predictions = pd.Series(model.predict(x_test))
+            print('{:10}\t{:10}\t{:10}'.format('actual', 'predict', 'match?'))
+
+            # calculate accuracy
+            numerator = 0.0
+            denominator = float(len(predictions))
+            for i in range(len(predictions)):
+                match = True if (y_test[i] == predictions[i]) else False
+                numerator += 1 if match else 0
+                print('{:10}\t{:10}\t{:10}'.format(y_train[i], predictions[i], match))
+            print('accuracy = {:7.2f}%'.format(100 * numerator / denominator))
+
+        else:
+            print('no method chosen')
+            exit()
+    elif type == 2:
+        method = input('method: [1: clustering] ')
+        if (method == 1):
+            clusterer = input('clustere: [1: k means]')
+            if clusterer == 1:
+                clusters = input('clusters: [1: 1, 2: 2, 3: 3] ')
+                if clusters == 1:
+                    print(type, method, clusters)
+                    model = KMeans(n_clusters=1, random_state=0)
+                elif clusters == 2:
+                    print(type, method, clusters)
+                    model = KMeans(n_clusters=2, random_state=0)
+                elif clusters == 3:
+                    print(type, method, clusters)
+                    model = KMeans(n_clusters=3, random_state=0)
+                else:
+                    print('no clusters chosen')
+                    exit()
+            else:
+                print('no clusterer chosen')
+                exit()
+        else:
+            print('no method chosen')
+            exit()
+
+        # train the model using the training sets and check score
+        model.fit(x_train)
+
+        # predict output
+        predictions = model.predict(x_test)
+        # print('{:10}\t{:10}\t{:10}'.format('actual', 'predict', 'match?'))
+
+        # check details
+        print('centroids: ' + model.cluster_centers_)
+        # print('labels: ' + model.labels_)
+
+        # calculate accuracy
+        numerator = 0.0
+        denominator = float(len(predictions))
+        for i in range(len(predictions)):
+            match = True if (y_test[i] == predictions[i]) else False
+            numerator += 1 if match else 0
+            # print('{:10}\t{:10}\t{:10}'.format(y_train[i], predictions[i], match))
+        print('accuracy = {:7.2f}%'.format(100 * numerator / denominator))
+    else:
+        print('no type chosen')
+        exit()
+
+
 
 if __name__ == "__main__":
     main()
