@@ -1,72 +1,61 @@
 from sklearn.cluster import KMeans
+from sklearn.cross_decomposition import CCA
+from sklearn.cross_decomposition import PLSCanonical
+from sklearn.cross_decomposition import PLSRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-from sklearn.linear_model import LogisticRegression
-from sklearn.linear_model import RidgeClassifier
-from sklearn.linear_model import Lasso
-from sklearn.linear_model import MultiTaskLasso
-from sklearn.linear_model import ElasticNet
-from sklearn.linear_model import MultiTaskElasticNet
-from sklearn.linear_model import Lars
-from sklearn.linear_model import LassoLars
-from sklearn.linear_model import OrthogonalMatchingPursuit
-from sklearn.linear_model import BayesianRidge
+# from sklearn.decomposition import FactorAnalysis
+# from sklearn.decomposition import PCA
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomTreesEmbedding
 from sklearn.linear_model import ARDRegression
-from sklearn.linear_model import TheilSenRegressor
+from sklearn.linear_model import BayesianRidge
+from sklearn.linear_model import ElasticNet
 from sklearn.linear_model import HuberRegressor
+from sklearn.linear_model import Lars
+from sklearn.linear_model import Lasso
+from sklearn.linear_model import LassoLars
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import MultiTaskElasticNet
+from sklearn.linear_model import MultiTaskLasso
+from sklearn.linear_model import OrthogonalMatchingPursuit
+from sklearn.linear_model import PassiveAggressiveClassifier
+from sklearn.linear_model import Perceptron
 from sklearn.linear_model import RANSACRegressor
+from sklearn.linear_model import RidgeClassifier
+from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import TheilSenRegressor
+# from sklearn.metrics import accuracy_score
+# from sklearn.model_selection import train_test_split
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.multiclass import OneVsOneClassifier
+# from sklearn.multioutput import MultiOutputClassifier
+# from sklearn.multioutput import MultiOutputRegressor
 from sklearn.naive_bayes import BernoulliNB
+from sklearn.naive_bayes import ComplementNB
 from sklearn.naive_bayes import GaussianNB
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.naive_bayes import ComplementNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neighbors import NearestCentroid
 from sklearn.neighbors import NearestNeighbors
 from sklearn.neighbors import RadiusNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-
-from sklearn.tree import ExtraTreeClassifier
-from sklearn.svm import LinearSVC
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import RandomTreesEmbedding
-# from sklearn.svm import SVC
-# from sklearn.svm import NuSVC
-# from sklearn.svm import SVR
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.linear_model import SGDClassifier
-from sklearn.linear_model import PassiveAggressiveClassifier
-# from sklearn.decomposition import PCA
-# from sklearn.decomposition import FactorAnalysis
-from sklearn.ensemble import AdaBoostClassifier
-
-from sklearn.linear_model import Perceptron
 from sklearn.neural_network import MLPClassifier
-
+from sklearn.preprocessing import LabelEncoder
 from sklearn.semi_supervised import LabelPropagation
 from sklearn.semi_supervised import LabelSpreading
-
-from sklearn.cross_decomposition import PLSRegression
-from sklearn.cross_decomposition import PLSCanonical
-from sklearn.cross_decomposition import CCA
-
-from sklearn.multiclass import OneVsRestClassifier
-# OneVsRestClassifier(LinearSVC(random_state=0)).fit(X, y).predict(X)
-from sklearn.multiclass import OneVsOneClassifier
-# OneVsOneClassifier(LinearSVC(random_state=0)).fit(X, y).predict(X)
-# from sklearn.multioutput import MultiOutputClassifier
-# from sklearn.multioutput import MultiOutputRegressor
-
-# not working with categorical data
-from sklearn.linear_model import LinearRegression
+from sklearn.svm import LinearSVC
+# from sklearn.svm import NuSVC
+# from sklearn.svm import SVC
+# from sklearn.svm import SVR
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import DecisionTreeRegressor
-
-# from sklearn.model_selection import train_test_split
-# from sklearn.metrics import accuracy_score
-from sklearn.preprocessing import LabelEncoder
-
+from sklearn.tree import ExtraTreeClassifier
 
 import codecs as cd
 import numpy as np
@@ -86,21 +75,6 @@ x_test = input_variables_values_test_datasets
 '''
 
 def supervised_learning(x_train, y_train, x_test, method):
-    # create model object
-    # model = DecisionTreeRegressor()
-
-    # model = LogisticRegression()
-    # model = SVC(gamma='scale', decision_function_shape='ovo') #kernel=
-    # model = LinearSVC()
-    # model = SVR()
-
-
-
-    # equation coefficient and intercept
-    # print('coefficient:', model.coef_)
-    # print('intercept:', model.intercept_)
-
-
     return predicted
 
 '''
