@@ -6,6 +6,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 # from sklearn.decomposition import FactorAnalysis
 # from sklearn.decomposition import PCA
+from sklearn.dummy import DummyClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import ExtraTreesClassifier
@@ -134,7 +135,8 @@ classifiers = {
     13: 'nearest centroid',
     14: 'perceptron',
     15: 'multi-layer perceptron',
-    16: 'ada boost'
+    16: 'ada boost',
+    17: 'dummy'
 }
 
 regressors = {
@@ -258,6 +260,26 @@ def main():
             model = MLPClassifier()
         elif classifier == 16:
             model = AdaBoostClassifier(n_estimators=50)
+        elif classifier == 17:
+            parameter = input('strategy: [1: stratified, 2: most frequent, 3: prior, 4: uniform, 5: constant] ')
+            if parameter == 1:
+                model = DummyClassifier(strategy='stratified')
+                parameter = 'stratified'
+            elif parameter == 2:
+                model = DummyClassifier(strategy='most_frequent')
+                parameter = 'most frequent'
+            elif parameter == 3:
+                model = DummyClassifier(strategy='prior')
+                parameter = 'prior'
+            elif parameter == 4:
+                model = DummyClassifier(strategy='uniform')
+                parameter = 'uniform'
+            elif parameter == 5:
+                model = DummyClassifier(strategy='constant')
+                parameter = 'constant'
+            else:
+                print('no strategy selected')
+                sys.exit()
         else:
             print('no classifier chosen')
             sys.exit()
